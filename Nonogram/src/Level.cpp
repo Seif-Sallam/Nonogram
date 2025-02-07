@@ -20,7 +20,7 @@ Level::Level(sf::RenderWindow *window, sf::Event *event, const std::string &leve
 	m_WinningText.setString("You Won!\n");
 	m_WinningText.setFont(m_Font);
 	m_WinningText.setCharacterSize(35);
-	m_WinningText.setPosition(sf::Vector2f(m_Window->getSize().x / 2 - 50.0f, m_Window->getSize().y / 2));
+	m_WinningText.setPosition(sf::Vector2f(m_Window->getSize().x / 2.0f - 50.0f, m_Window->getSize().y / 2.0f));
 }
 
 Level::~Level()
@@ -50,7 +50,7 @@ void Level::Update(GameStates &g)
 	float elapsedTime = m_Clock.getElapsedTime().asSeconds();
 	if (m_Won)
 	{
-		m_WinningText.setFillColor(sf::Color(abs(std::sin(elapsedTime)) * 255, 100, 125));
+		m_WinningText.setFillColor(sf::Color((uint8_t)abs(std::sin(elapsedTime)) * 255, 100, 125));
 	}
 	// Checking the buttons clicks
 	if (m_ExitButton->IsPressed())
@@ -143,7 +143,7 @@ void Level::ReadLevel(const std::string &levelName)
 		throw;
 	}
 	std::vector<TileState> gridNumbers;
-	Vec2i gridSize;
+	Vec2u gridSize;
 	inputFile >> gridSize.x >> gridSize.y;
 	Vec2f scale;
 
@@ -170,7 +170,7 @@ void Level::ReadLevel(const std::string &levelName)
 	uint32_t maxSet;
 	inputFile >> maxSet;
 
-	uint32_t labelOffset;
+	float labelOffset;
 	labelOffset = maxSet * 15 + 10.0f;
 
 	m_RowAnswerSequences.resize(gridSize.x);
@@ -252,7 +252,7 @@ void Level::ReadLevel(const std::string &levelName)
 	windowSize.x = gridSize.x * 32.0f + horzPos.x + 10.0f;
 	windowSize.y = gridSize.y * 32.0f + horzPos.y + 20.0f;
 
-	m_Window->setSize(Vec2u(windowSize.x, windowSize.y));
+	m_Window->setSize({(uint32_t)windowSize.x, (uint32_t)windowSize.y});
 	m_View.setCenter(windowSize / 2.0f);
 	m_View.setSize(windowSize);
 

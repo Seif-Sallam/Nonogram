@@ -14,9 +14,9 @@ enum class TileState
 class Grid : public sf::Drawable
 {
 public:
-	Grid(Vec2i size, Vec2f offset, sf::RenderWindow *window, const std::vector<TileState> &gridStates);
+	Grid(Vec2u size, Vec2f offset, sf::RenderWindow *window, const std::vector<TileState> &gridStates);
 	~Grid();
-	Vec2f GetSize() const;
+	Vec2u GetSize() const;
 	int32_t GetNumberOfPLacedTiles() const;
 	void PollEvents(sf::Event *event);
 	void draw(sf::RenderTarget &target, sf::RenderStates states = sf::RenderStates::Default) const override;
@@ -28,7 +28,7 @@ private:
 	std::vector<sf::Sprite> m_Grid;
 	sf::RenderWindow *m_Window;
 	sf::Texture m_TileTextures;
-	Vec2f m_Size;
+	Vec2u m_Size;
 	Vec2f m_Offset;
 	std::vector<TileState> m_CurrentStates;
 	const std::vector<TileState> m_InitialStates;

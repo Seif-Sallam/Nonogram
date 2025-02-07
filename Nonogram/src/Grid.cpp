@@ -1,13 +1,13 @@
 #include "Grid.h"
 
-Grid::Grid(Vec2i size, Vec2f offset, sf::RenderWindow *window, const std::vector<TileState> &gridStates)
+Grid::Grid(Vec2u size, Vec2f offset, sf::RenderWindow *window, const std::vector<TileState> &gridStates)
 	: m_InitialStates(gridStates)
 {
 	m_TileTextures.loadFromFile(RSC_DIR "Tiles.png");
 	m_Grid.resize(size.x * size.y);
 	m_CurrentStates.resize(size.x * size.y);
-	for (uint32_t i = 0; i < size.x; i++)
-		for (uint32_t j = 0; j < size.y; j++)
+	for (int32_t i = 0; i < size.x; i++)
+		for (int32_t j = 0; j < size.y; j++)
 		{
 			uint32_t index = i + j * size.x;
 			m_Grid[index].setPosition(sf::Vector2f(offset.x + i * 32.0f, offset.y + j * 32.0f));
@@ -31,7 +31,7 @@ void Grid::MarkTile(uint32_t index, TileState tileState)
 	m_Grid[index].setTextureRect(sf::IntRect(sf::Vector2i(int32_t(tileState) * 32, 0), sf::Vector2i(32, 32)));
 }
 
-Vec2f Grid::GetSize() const
+Vec2u Grid::GetSize() const
 {
 	return m_Size;
 }
@@ -41,9 +41,9 @@ void Grid::PollEvents(sf::Event *event)
 	Vec2i mousePos = m_Window->mapCoordsToPixel(sf::Vector2f(sf::Mouse::getPosition(*m_Window)));
 	Vec2f pos = Vec2f(mousePos.x - m_Offset.x, mousePos.y - m_Offset.y);
 
-	int32_t x = pos.x / 32.0f;
-	int32_t y = pos.y / 32.0f;
-	uint32_t index = x + y * m_Size.x;
+	uint32_t x = int(pos.x / 32.0f);
+	uint32_t y = int(pos.y / 32.0f);
+	uint32_t index = x + y * int(m_Size.x);
 	if (pos.x > -1 && pos.y > -1 && x < m_Size.x && y < m_Size.y)
 	{
 		if (index < m_Size.x * m_Size.y && index >= 0)
@@ -96,7 +96,7 @@ void Grid::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	for (uint32_t i = 0; i < m_Size.x; i++)
 		for (uint32_t j = 0; j < m_Size.y; j++)
 		{
-			uint32_t index = i + j * m_Size.x;
+			uint32_t index = i + j * int(m_Size.x);
 			m_Window->draw(m_Grid[index], states);
 		}
 }
